@@ -41,6 +41,9 @@ jobs:
             "https://github.com/rchen14b/luci-theme-glass.git|luci-theme-glass"
             "https://github.com/isalikai/luci-app-owq-wol.git|luci-app-owq-wol"
             "https://github.com/timsaya/luci-app-bandix-plus.git|luci-app-bandix-plus"
+            "https://github.com/sbwml/luci-app-quickfile.git|luci-app-quickfile"
+            "https://github.com/gSpotx2f/luci-app-temp-status.git|luci-app-temp-status"
+            "https://github.com/gSpotx2f/luci-app-cpu-status.git|luci-app-cpu-status"
         )
 
         # 临时记录文件：用来追踪本次配置中所有合法的仓库大目录

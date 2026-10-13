@@ -1,0 +1,115 @@
+# =================================================================
+# 工作流核心配置区
+# =================================================================
+name: 软件同步 # 工作流的名称：在 GitHub Actions 页面左侧显示的名称
+
+on:
+  schedule:
+    - cron: '0 20 * * *' # 定时触发：每天国际标准时间 (UTC) 20:00（北京时间次日凌晨 04:00）自动执行
+  workflow_dispatch:   # 手动触发：允许您在 GitHub 页面上点击 "Run workflow" 手动运行该脚本
+
+permissions:
+  contents: write # 赋予脚本对您仓库代码仓库的“写权限”（用于推送更新后的代码）
+  actions: write  # 赋予脚本对 Actions 运行日志和工作流的“写权限”
+  
+jobs:
+  merge-repos:
+    runs-on: ubuntu-22.04 # 指定运行环境：使用最新版 Ubuntu 虚拟机
+    steps:
+    - name: Checkout My Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Git Configuration
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@://github.com"
+
+    - name: Copy and Merge Repositories
+      run: |
+        # =================================================================
+        # 1. 声明式配置区：格式为 "URL|本地规范目录名" 
+        # 统一映射为标准的编译目录名，防止清理引擎误删，同时方便固件编译直接读取
+        # =================================================================
+        REPOS_CONFIG=(
+            "https://github.com/sirpdboy/luci-app-taskplan.git|luci-app-taskplan"
+            "https://github.com/sbwml/luci-app-airconnect.git|luci-app-airconnect"
+            "https://github.com/sirpdboy/netspeedtest.git|luci-app-netspeedtest"
+            "https://github.com/sirpdboy/luci-app-parentcontrol.git|luci-app-parentcontrol"
+            "https://github.com/nikkinikki-org/OpenWrt-nikki.git|luci-app-nikki"
+            "https://github.com/FUjr/QModem.git|luci-app-qmodem-next"
+            "https://github.com/qosmio/nss-packages.git|nss-packages"
+            "https://github.com/rchen14b/luci-theme-glass.git|luci-theme-glass"
+        )
+
+        # 临时记录文件：用来追踪本次配置中所有合法的仓库大目录
+        VALID_REPOS_LIST=$(mktemp)
+
+        # =================================================================
+        # 2. 核心全量克隆与清理引擎（全量克隆，精准切除根目录所有隐藏文件）
+        # =================================================================
+        for item in "${REPOS_CONFIG[@]}"; do
+          # 解析 Git 地址和本地标准目录名
+          repo_url="${item%%|*}"
+          repo_name="${item##*|}"
+          
+          echo "========================================================="
+          echo "正在全量克隆上游仓库: $repo_url -> 规范目录: $repo_name"
+          echo "========================================================="
+          
+          # 将当前规范目录名写入临时白名单
+          echo "$repo_name" >> "$VALID_REPOS_LIST"
+          
+          # 如果本地已存在该目录，先清理掉以确保全量更新
+          rm -rf "$repo_name"
+          
+          # 执行克隆（拉取上游源码）
+          git clone --depth 1 "$repo_url" "$repo_name"
+          
+          # 精准切除根目录下的所有隐藏文件及文件夹（如 .git, .github, .gitignore 等）
+          if [ -d "$repo_name" ]; then
+            find "$repo_name" -maxdepth 1 -name ".*" -exec rm -rf {} +
+            echo "成功清理 $repo_name 根目录下的所有隐藏环境配置文件。"
+          else
+            echo "错误: 仓库 $repo_name 克隆失败！"
+          fi
+        done
+
+        # =================================================================
+        # 3. 自动同步与提交引擎（清理移出的旧仓库并提交到您的主仓库）
+        # =================================================================
+        echo "========================================================="
+        echo "正在检查是否存在被移除的失效旧仓库..."
+        
+        # 遍历当前目录下的所有子文件夹
+        for dir in */; do
+          # 移除末尾的斜杠 / 得到纯目录名
+          dir_name="${dir%/}"
+          
+          # 忽略当前脚本所在的隐藏目录（如 .git, .github）
+          if [[ "$dir_name" == .* ]]; then
+            continue
+          fi
+          
+          # 如果当前文件夹不在白名单中，说明其已在配置区被剔除，执行自动清理
+          if ! grep -qx "$dir_name" "$VALID_REPOS_LIST"; then
+            echo "发现失效旧仓库目录: $dir_name，正在从工作区中彻底移除..."
+            # 从 Git 追踪和本地磁盘中强制删除
+            git rm -rf "$dir_name" 2>/dev/null || rm -rf "$dir_name"
+          fi
+        done
+        
+        echo "========================================================="
+        echo "正在将更新同步并推送到您的远程仓库..."
+        git add .
+        
+        # 检查是否有代码变动，有则提交
+        if ! git diff --staged --quiet; then
+          git commit -m "自动同步: 升级并清理上游插件仓库 (定时任务)"
+          git push origin HEAD:${{ github.ref }}
+          echo "所有上游仓库已成功同步并推送！"
+        else
+          echo "没有检测到任何代码变更，跳过提交。"
+        fi
+
+        # 清理临时文件
+        rm -f "$VALID_REPOS_LIST"

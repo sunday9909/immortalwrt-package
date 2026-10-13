@@ -39,6 +39,7 @@ jobs:
             "https://github.com/FUjr/QModem.git|QModem"
             "https://github.com/qosmio/nss-packages.git|nss-packages"
             "https://github.com/rchen14b/luci-theme-glass.git|luci-theme-glass"
+            "https://github.com/isalikai/luci-app-owq-wol.git|luci-app-owq-wol"
         )
 
         # 临时记录文件：用来追踪本次配置中所有合法的仓库大目录

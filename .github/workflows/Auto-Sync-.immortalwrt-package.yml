@@ -46,6 +46,7 @@ jobs:
             "https://github.com/gSpotx2f/luci-app-cpu-status.git|luci-app-cpu-status"
             "https://github.com/VolanticSystems/luci-app-appflow.git|luci-app-appflow"
             "https://github.com/nooblk-98/luci-app-aw1k-led.git|luci-app-aw1k-led"
+            "https://github.com/mokesher/luci-app-dashboard.git|luci-app-dashboard"
         )
 
         # 临时记录文件：用来追踪本次配置中所有合法的仓库大目录

@@ -188,6 +188,7 @@ local function build_compat_netinfo(databus)
         wanIpv6 = wan.ipv6 or "",
         lanIp = lan.ip or "",
         dns = wan.dns or lan.dns or {},
+        network_uptime_raw = tonumber(network.uptime_raw or network.network_uptime_raw or 0) or 0,
         connCount = tonumber(status.conn_count or status.connCount or 0) or 0,
         interfaceName = network.interface or "",
         gateway = wan.gateway or "",

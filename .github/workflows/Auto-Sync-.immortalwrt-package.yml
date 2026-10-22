@@ -48,6 +48,7 @@ jobs:
             "https://github.com/nooblk-98/luci-app-aw1k-led.git|luci-app-aw1k-led"
             "https://github.com/hxzlplp7/luci-app-dashboard.git|luci-app-dashboard"
             "https://github.com/timsaya/openwrt-bandix-plus.git|openwrt-bandix-plus"
+            "https://github.com/sbitoh/luci-app-dailyreport.git|luci-app-dailyreport"
         )
 
         # 临时记录文件：用来追踪本次配置中所有合法的仓库大目录

@@ -51,6 +51,7 @@ jobs:
             "https://github.com/sbitoh/luci-app-dailyreport.git|luci-app-dailyreport"
             "https://github.com/zzsj0928/luci-theme-liquid.git|luci-theme-liquid"
             "https://github.com/rothdren-lion/luci-app-route-tool.git|luci-app-route-tool"
+            "https://github.com/Saunakalja/luci-app-internetblock.git|luci-app-internetblock"
         )
 
         # 临时记录文件：用来追踪本次配置中所有合法的仓库大目录

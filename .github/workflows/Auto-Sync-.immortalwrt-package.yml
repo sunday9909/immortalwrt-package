@@ -31,9 +31,9 @@ jobs:
         # 统一映射为标准的编译目录名，防止清理引擎误删，同时方便固件编译直接读取
         # =================================================================
         REPOS_CONFIG=(
-            "https://github.com/sirpdboy/luci-app-taskplan.git|luci-app-taskplan"
+        #    "https://github.com/sirpdboy/luci-app-taskplan.git|luci-app-taskplan"
             "https://github.com/sbwml/luci-app-airconnect.git|luci-app-airconnect"
-            "https://github.com/sirpdboy/netspeedtest.git|luci-app-netspeedtest"
+        #    "https://github.com/sirpdboy/netspeedtest.git|luci-app-netspeedtest"
             "https://github.com/selfcan/luci-app-qmodem-failover.git|luci-app-qmodem-failover"
             "https://github.com/nikkinikki-org/OpenWrt-nikki.git|luci-app-nikki"
             "https://github.com/FUjr/QModem.git|QModem"

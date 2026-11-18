@@ -1,2 +1,0 @@
-head: /dev/mmcblk0rpmb: I/O error
-rc=1

@@ -41,7 +41,7 @@ jobs:
             "https://github.com/timsaya/luci-app-bandix-plus.git|luci-app-bandix-plus"
             "https://github.com/sbwml/luci-app-quickfile.git|luci-app-quickfile"
             "https://github.com/gSpotx2f/luci-app-temp-status.git|luci-app-temp-status"
-            "https://github.com/gSpotx2f/luci-app-cpu-status.git|luci-app-cpu-status"
+            "https://github.com/QiuSimons/vmlinux-btf.git|vmlinux-btf"
             "https://github.com/VolanticSystems/luci-app-appflow.git|luci-app-appflow"
             "https://github.com/nooblk-98/luci-app-aw1k-led.git|luci-app-aw1k-led"
             "https://github.com/OppsError404/luci-app-dashboard.git|luci-app-dashboard"
